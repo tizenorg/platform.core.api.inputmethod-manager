@@ -6,7 +6,7 @@ Group:      Graphics & UI Framework/Input
 License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  cmake
-BuildRequires:  pkgconfig(dlog)
+BuildRequires:  pkgconfig(capi-base-common)
 BuildRequires:  pkgconfig(isf)
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
