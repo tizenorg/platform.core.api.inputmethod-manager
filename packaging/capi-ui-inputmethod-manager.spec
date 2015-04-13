@@ -56,7 +56,7 @@ cp LICENSE %{buildroot}/usr/share/license/%{name}
 /usr/share/license/capi-ui-inputmethod-manager
 
 %files devel
-%{_includedir}/inputmethod-manager*.h
+%{_includedir}/inputmethod_manager*.h
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libcapi-ui-inputmethod-manager.so
 
