@@ -21,14 +21,20 @@
 
 int ime_manager_show_ime_list(void)
 {
-    isf_control_show_ime_list();
-    return IME_MANAGER_ERROR_NONE;
+    int ret = isf_control_show_ime_list();
+    if (ret == 0)
+        return IME_MANAGER_ERROR_NONE;
+    else
+        return IME_MANAGER_ERROR_OPERATION_FAILED;
 }
 
 int ime_manager_show_ime_selector(void)
 {
-    isf_control_show_ime_selector();
-    return IME_MANAGER_ERROR_NONE;
+    int ret = isf_control_show_ime_selector();
+    if (ret == 0)
+        return IME_MANAGER_ERROR_NONE;
+    else
+        return IME_MANAGER_ERROR_OPERATION_FAILED;
 }
 
 int ime_manager_is_ime_enabled(const char *app_id, bool *enabled)
