@@ -42,7 +42,7 @@ typedef enum
 {
     IME_MANAGER_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
     IME_MANAGER_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
-    IME_MANAGER_ERROR_OPERATION_FAILED = TIZEN_ERROR_UIX_CLASS | 0x0004, /**< Operation failed */
+    IME_MANAGER_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0004, /**< Operation failed */
 } ime_manager_error_e;
 
 /**
