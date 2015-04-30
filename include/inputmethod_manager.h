@@ -42,7 +42,8 @@ typedef enum
 {
     IME_MANAGER_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
     IME_MANAGER_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
-    IME_MANAGER_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0004, /**< Operation failed */
+    IME_MANAGER_ERROR_PERMISSION_DENIED = TIZEN_ERROR_PERMISSION_DENIED, /**< Permission denied */
+    IME_MANAGER_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0010, /**< Operation failed */
 } ime_manager_error_e;
 
 /**
@@ -52,8 +53,13 @@ typedef enum
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/imemanager
+ *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_MANAGER_ERROR_NONE No error
+ * @retval #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
  *
  * @see ime_manager_show_ime_selector
@@ -67,8 +73,13 @@ EXPORT_API int ime_manager_show_ime_list(void);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/imemanager
+ *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_MANAGER_ERROR_NONE No error
+ * @retval #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
  *
  * @see ime_manager_show_ime_list
@@ -82,12 +93,17 @@ EXPORT_API int ime_manager_show_ime_selector(void);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/imemanager
+ *
  * @param[in] app_id The application ID of the IME
  * @param[out] enabled The On (enabled) and Off (disabled) state of the IME
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_MANAGER_ERROR_NONE No error
  * @retval #IME_MANAGER_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
  *
  * @see ime_manager_show_ime_list
@@ -101,11 +117,16 @@ EXPORT_API int ime_manager_is_ime_enabled(const char *app_id, bool *enabled);
  *
  * @since_tizen 2.4
  *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/imemanager
+ *
  * @param[out] app_id The application ID of the active IME
  *
  * @return 0 on success, otherwise a negative error value
  * @retval #IME_MANAGER_ERROR_NONE No error
  * @retval #IME_MANAGER_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
  *
  * @see ime_manager_show_ime_selector
