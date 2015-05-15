@@ -7,6 +7,7 @@ License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(capi-base-common)
+BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(isf)
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig

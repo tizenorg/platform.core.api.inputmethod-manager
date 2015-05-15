@@ -7,7 +7,7 @@ SET(maintainer "Sungmin Kwak <sungmin.kwak@samsung.com>")
 SET(description "Input Method Manager APIs")
 SET(service "ui")
 SET(submodule "inputmethod-manager")
-SET(dependents "capi-base-common isf")
+SET(dependents "capi-base-common dlog isf")
 
 SET(Services
         "application"
