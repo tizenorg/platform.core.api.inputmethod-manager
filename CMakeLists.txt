@@ -8,6 +8,7 @@ SET(description "Input Method Manager APIs")
 SET(service "ui")
 SET(submodule "inputmethod-manager")
 SET(dependents "capi-base-common dlog isf")
+SET(LIBDIR ${LIB_INSTALL_DIR})
 
 SET(Services
         "application"
@@ -84,7 +85,7 @@ SET_TARGET_PROPERTIES(${fw_name}
      CLEAN_DIRECT_OUTPUT 1
 )
 
-INSTALL(TARGETS ${fw_name} DESTINATION lib)
+INSTALL(TARGETS ${fw_name} DESTINATION ${LIBDIR})
 INSTALL(
         DIRECTORY ${INC_DIR}/ DESTINATION include
         FILES_MATCHING
@@ -101,7 +102,7 @@ CONFIGURE_FILE(
     ${CMAKE_CURRENT_SOURCE_DIR}/${fw_name}.pc
     @ONLY
 )
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${fw_name}.pc DESTINATION lib/pkgconfig)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${fw_name}.pc DESTINATION ${LIBDIR}/pkgconfig)
 INSTALL(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION /usr/share/license RENAME capi-ui-inputmethod-manager)
 
 IF(UNIX)
