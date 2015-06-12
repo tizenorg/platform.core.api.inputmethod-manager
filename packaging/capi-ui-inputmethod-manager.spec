@@ -13,7 +13,7 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
 %description
-
+Input Method Manager Library
 
 %package devel
 Summary:  Input Method Manager Library (Development)
@@ -21,7 +21,7 @@ Group:    Development/Libraries
 Requires: %{name} = %{version}-%{release}
 
 %description devel
-
+Input Method Manager Library (Development)
 
 
 %prep
