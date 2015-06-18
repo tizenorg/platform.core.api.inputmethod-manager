@@ -27,7 +27,7 @@
 
 int ime_manager_show_ime_list(void)
 {
-    int ret = 0; //isf_control_show_ime_list();
+    int ret = isf_control_show_ime_list();
     if (ret == 0)
         return IME_MANAGER_ERROR_NONE;
     else {
@@ -38,7 +38,7 @@ int ime_manager_show_ime_list(void)
 
 int ime_manager_show_ime_selector(void)
 {
-    int ret = 0; //isf_control_show_ime_selector();
+    int ret = isf_control_show_ime_selector();
     if (ret == 0)
         return IME_MANAGER_ERROR_NONE;
     else {
@@ -54,7 +54,7 @@ int ime_manager_is_ime_enabled(const char *app_id, bool *enabled)
         return IME_MANAGER_ERROR_INVALID_PARAMETER;
     }
 
-    int ret = 0; //isf_control_is_ime_enabled(app_id, enabled);
+    int ret = isf_control_is_ime_enabled(app_id, enabled);
     if (ret < 0) {
         LOGW("IME_MANAGER_ERROR_OPERATION_FAILED");
         return IME_MANAGER_ERROR_OPERATION_FAILED;
@@ -70,7 +70,7 @@ int ime_manager_get_active_ime(char **app_id)
         return IME_MANAGER_ERROR_INVALID_PARAMETER;
     }
 
-    int ret = isf_control_get_active_ise(app_id);
+    int ret = isf_control_get_active_ime(app_id);
     if (ret < 0) {
         LOGW("IME_MANAGER_ERROR_OPERATION_FAILED");
         return IME_MANAGER_ERROR_OPERATION_FAILED;
