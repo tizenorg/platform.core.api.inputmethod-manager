@@ -7,7 +7,7 @@ SET(maintainer "Sungmin Kwak <sungmin.kwak@samsung.com>")
 SET(description "Input Method Manager APIs")
 SET(service "ui")
 SET(submodule "inputmethod-manager")
-SET(dependents "capi-base-common dlog isf")
+SET(dependents "capi-base-common dlog isf cynara-client")
 SET(LIBDIR ${LIB_INSTALL_DIR})
 
 SET(Services

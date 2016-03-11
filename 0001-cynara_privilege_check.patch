@@ -1,0 +1,396 @@
+From 572ca52499672944096c4deb1de9b373fe3bf2f9 Mon Sep 17 00:00:00 2001
+From: "sungwook79.park" <sungwook79.park@samsung.com>
+Date: Fri, 11 Mar 2016 16:47:20 +0900
+Subject: [PATCH] cynara_privilege_check
+
+Change-Id: I4b90d777546f0d7c85a3362ac08cddfef12b888b
+Signed-off-by: sungwook79.park <sungwook79.park@samsung.com>
+---
+ CMakeLists.txt                                  |   2 +-
+ include/privilege_checker.h                     |  10 ++
+ inputmethodmanager_cynara_privilege_check.patch | 140 ++++++++++++++++++++++++
+ packaging/capi-ui-inputmethod-manager.spec      |   2 +
+ src/inputmethod_manager.cpp                     |  60 ++++++++++
+ src/privilege_checker.cpp                       |  65 +++++++++++
+ 6 files changed, 278 insertions(+), 1 deletion(-)
+ create mode 100755 include/privilege_checker.h
+ create mode 100644 inputmethodmanager_cynara_privilege_check.patch
+ mode change 100644 => 100755 src/inputmethod_manager.cpp
+ create mode 100755 src/privilege_checker.cpp
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ffd2ab7..68cf8bf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,7 +7,7 @@ SET(maintainer "Sungmin Kwak <sungmin.kwak@samsung.com>")
+ SET(description "Input Method Manager APIs")
+ SET(service "ui")
+ SET(submodule "inputmethod-manager")
+-SET(dependents "capi-base-common dlog isf")
++SET(dependents "capi-base-common dlog isf cynara-client")
+ SET(LIBDIR ${LIB_INSTALL_DIR})
+ 
+ SET(Services
+diff --git a/include/privilege_checker.h b/include/privilege_checker.h
+new file mode 100755
+index 0000000..7b84fdb
+--- /dev/null
++++ b/include/privilege_checker.h
+@@ -0,0 +1,10 @@
++#ifndef __PRIVILEGE_CHECKER_H
++#define __PRIVILEGE_CHECKER_H
++
++#define IME_MANAGER_PRIVILEGE "http://tizen.org/privilege/imemanager"
++
++bool inputmethod_cynara_initialize ();
++void inputmethod_cynara_finish ();
++bool checkPrivilege (const char *uid, const char *privilege);
++
++#endif //__PRIVILEGE_CHECKER_H
+diff --git a/inputmethodmanager_cynara_privilege_check.patch b/inputmethodmanager_cynara_privilege_check.patch
+new file mode 100644
+index 0000000..cf3337d
+--- /dev/null
++++ b/inputmethodmanager_cynara_privilege_check.patch
+@@ -0,0 +1,140 @@
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index ffd2ab7..68cf8bf 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -7,7 +7,7 @@ SET(maintainer "Sungmin Kwak <sungmin.kwak@samsung.com>")
++ SET(description "Input Method Manager APIs")
++ SET(service "ui")
++ SET(submodule "inputmethod-manager")
++-SET(dependents "capi-base-common dlog isf")
+++SET(dependents "capi-base-common dlog isf cynara-client")
++ SET(LIBDIR ${LIB_INSTALL_DIR})
++ 
++ SET(Services
++diff --git a/packaging/capi-ui-inputmethod-manager.spec b/packaging/capi-ui-inputmethod-manager.spec
++index 85702c8..b76f789 100644
++--- a/packaging/capi-ui-inputmethod-manager.spec
+++++ b/packaging/capi-ui-inputmethod-manager.spec
++@@ -9,6 +9,7 @@ BuildRequires:  cmake
++ BuildRequires:  pkgconfig(capi-base-common)
++ BuildRequires:  pkgconfig(dlog)
++ BuildRequires:  pkgconfig(isf)
+++BuildRequires:  pkgconfig(cynara-client)
++ Requires(post): /sbin/ldconfig
++ Requires(postun): /sbin/ldconfig
++ 
++@@ -58,6 +59,7 @@ cp LICENSE %{buildroot}/usr/share/license/%{name}
++ 
++ %files devel
++ %{_includedir}/inputmethod_manager*.h
+++%{_includedir}/privilege_checker*.h
++ %{_libdir}/pkgconfig/*.pc
++ %{_libdir}/libcapi-ui-inputmethod-manager.so
++ 
++diff --git a/src/inputmethod_manager.cpp b/src/inputmethod_manager.cpp
++old mode 100644
++new mode 100755
++index 4e4e801..303f05a
++--- a/src/inputmethod_manager.cpp
+++++ b/src/inputmethod_manager.cpp
++@@ -14,10 +14,13 @@
++  * limitations under the License.
++  */
++ 
+++#include <stdio.h>
++ #include <stdlib.h>
++ #include <string.h>
++ #include "isf_control.h"
++ #include <dlog.h>
+++#include <unistd.h>
+++#include <privilege_checker.h>
++ #include <inputmethod_manager.h>
++ 
++ #ifdef LOG_TAG
++@@ -25,8 +28,38 @@
++ #endif
++ #define LOG_TAG "INPUTMETHOD_MANAGER"
++ 
+++ime_manager_error_e _check_privilege()
+++{
+++    char uid[16]; char pid[16];
+++
+++    if(inputmethod_cynara_initialize () == false){
+++        LOGE("inputmethod_cynara_initialize () == false");
+++        return IME_MANAGER_ERROR_PERMISSION_DENIED;
+++    }
+++
+++    snprintf(uid, 16, "%d", getuid());
+++    snprintf(pid, 16, "%d", getpid());
+++    if(checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false){
+++        LOGE("checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false   ");
+++        LOGE("uid : %s.", uid);
+++        LOGE("uid : %s.", pid);
+++        return IME_MANAGER_ERROR_PERMISSION_DENIED;
+++    }
+++
+++    return IME_MANAGER_ERROR_NONE;
+++}
+++
++ int ime_manager_show_ime_list(void)
++ {
+++    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
+++
+++    retVal = _check_privilege();
+++    if (retVal != IME_MANAGER_ERROR_NONE) {
+++        LOGE("_check_privilege returned %d.", retVal);
+++        return retVal;
+++    }
+++    inputmethod_cynara_finish ();
+++
++     int ret = isf_control_show_ime_list();
++     if (ret == 0)
++         return IME_MANAGER_ERROR_NONE;
++@@ -38,6 +71,15 @@ int ime_manager_show_ime_list(void)
++ 
++ int ime_manager_show_ime_selector(void)
++ {
+++    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
+++
+++    retVal = _check_privilege();
+++    if (retVal != IME_MANAGER_ERROR_NONE) {
+++        LOGE("_check_privilege returned %d.", retVal);
+++        return retVal;
+++    }
+++    inputmethod_cynara_finish ();
+++
++     int ret = isf_control_show_ime_selector();
++     if (ret == 0)
++         return IME_MANAGER_ERROR_NONE;
++@@ -49,6 +91,15 @@ int ime_manager_show_ime_selector(void)
++ 
++ int ime_manager_is_ime_enabled(const char *app_id, bool *enabled)
++ {
+++    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
+++
+++    retVal = _check_privilege();
+++    if (retVal != IME_MANAGER_ERROR_NONE) {
+++        LOGE("_check_privilege returned %d.", retVal);
+++        return retVal;
+++    }
+++    inputmethod_cynara_finish ();
+++
++     if (!app_id || !enabled) {
++         LOGW("IME_MANAGER_ERROR_INVALID_PARAMETER");
++         return IME_MANAGER_ERROR_INVALID_PARAMETER;
++@@ -65,6 +116,15 @@ int ime_manager_is_ime_enabled(const char *app_id, bool *enabled)
++ 
++ int ime_manager_get_active_ime(char **app_id)
++ {
+++    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
+++
+++    retVal = _check_privilege();
+++    if (retVal != IME_MANAGER_ERROR_NONE) {
+++        LOGE("_check_privilege returned %d.", retVal);
+++        return retVal;
+++    }
+++    inputmethod_cynara_finish ();
+++
++     if (!app_id) {
++         LOGW("IME_MANAGER_ERROR_INVALID_PARAMETER");
++         return IME_MANAGER_ERROR_INVALID_PARAMETER;
+diff --git a/packaging/capi-ui-inputmethod-manager.spec b/packaging/capi-ui-inputmethod-manager.spec
+index 85702c8..b76f789 100644
+--- a/packaging/capi-ui-inputmethod-manager.spec
++++ b/packaging/capi-ui-inputmethod-manager.spec
+@@ -9,6 +9,7 @@ BuildRequires:  cmake
+ BuildRequires:  pkgconfig(capi-base-common)
+ BuildRequires:  pkgconfig(dlog)
+ BuildRequires:  pkgconfig(isf)
++BuildRequires:  pkgconfig(cynara-client)
+ Requires(post): /sbin/ldconfig
+ Requires(postun): /sbin/ldconfig
+ 
+@@ -58,6 +59,7 @@ cp LICENSE %{buildroot}/usr/share/license/%{name}
+ 
+ %files devel
+ %{_includedir}/inputmethod_manager*.h
++%{_includedir}/privilege_checker*.h
+ %{_libdir}/pkgconfig/*.pc
+ %{_libdir}/libcapi-ui-inputmethod-manager.so
+ 
+diff --git a/src/inputmethod_manager.cpp b/src/inputmethod_manager.cpp
+old mode 100644
+new mode 100755
+index 4e4e801..a664c32
+--- a/src/inputmethod_manager.cpp
++++ b/src/inputmethod_manager.cpp
+@@ -14,10 +14,13 @@
+  * limitations under the License.
+  */
+ 
++#include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include "isf_control.h"
+ #include <dlog.h>
++#include <unistd.h>
++#include <privilege_checker.h>
+ #include <inputmethod_manager.h>
+ 
+ #ifdef LOG_TAG
+@@ -25,8 +28,38 @@
+ #endif
+ #define LOG_TAG "INPUTMETHOD_MANAGER"
+ 
++ime_manager_error_e _check_privilege()
++{
++    char uid[16]; char pid[16];
++
++    if(inputmethod_cynara_initialize () == false){
++        LOGE("inputmethod_cynara_initialize () == false");
++        return IME_MANAGER_ERROR_PERMISSION_DENIED;
++    }
++
++    snprintf(uid, 16, "%d", getuid());
++    snprintf(pid, 16, "%d", getpid());
++    if(checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false){
++        LOGE("checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false   ");
++        LOGE("uid : %s.", uid);
++        LOGE("pid : %s.", pid);
++        return IME_MANAGER_ERROR_PERMISSION_DENIED;
++    }
++
++    return IME_MANAGER_ERROR_NONE;
++}
++
+ int ime_manager_show_ime_list(void)
+ {
++    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
++
++    retVal = _check_privilege();
++    if (retVal != IME_MANAGER_ERROR_NONE) {
++        LOGE("_check_privilege returned %d.", retVal);
++        return retVal;
++    }
++    inputmethod_cynara_finish ();
++
+     int ret = isf_control_show_ime_list();
+     if (ret == 0)
+         return IME_MANAGER_ERROR_NONE;
+@@ -38,6 +71,15 @@ int ime_manager_show_ime_list(void)
+ 
+ int ime_manager_show_ime_selector(void)
+ {
++    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
++
++    retVal = _check_privilege();
++    if (retVal != IME_MANAGER_ERROR_NONE) {
++        LOGE("_check_privilege returned %d.", retVal);
++        return retVal;
++    }
++    inputmethod_cynara_finish ();
++
+     int ret = isf_control_show_ime_selector();
+     if (ret == 0)
+         return IME_MANAGER_ERROR_NONE;
+@@ -49,6 +91,15 @@ int ime_manager_show_ime_selector(void)
+ 
+ int ime_manager_is_ime_enabled(const char *app_id, bool *enabled)
+ {
++    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
++
++    retVal = _check_privilege();
++    if (retVal != IME_MANAGER_ERROR_NONE) {
++        LOGE("_check_privilege returned %d.", retVal);
++        return retVal;
++    }
++    inputmethod_cynara_finish ();
++
+     if (!app_id || !enabled) {
+         LOGW("IME_MANAGER_ERROR_INVALID_PARAMETER");
+         return IME_MANAGER_ERROR_INVALID_PARAMETER;
+@@ -65,6 +116,15 @@ int ime_manager_is_ime_enabled(const char *app_id, bool *enabled)
+ 
+ int ime_manager_get_active_ime(char **app_id)
+ {
++    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
++
++    retVal = _check_privilege();
++    if (retVal != IME_MANAGER_ERROR_NONE) {
++        LOGE("_check_privilege returned %d.", retVal);
++        return retVal;
++    }
++    inputmethod_cynara_finish ();
++
+     if (!app_id) {
+         LOGW("IME_MANAGER_ERROR_INVALID_PARAMETER");
+         return IME_MANAGER_ERROR_INVALID_PARAMETER;
+diff --git a/src/privilege_checker.cpp b/src/privilege_checker.cpp
+new file mode 100755
+index 0000000..66f9fd8
+--- /dev/null
++++ b/src/privilege_checker.cpp
+@@ -0,0 +1,65 @@
++#include "privilege_checker.h"
++
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include <dlog.h>
++
++#include <cynara-client.h>
++#include <cynara-error.h>
++#include <cynara-creds-socket.h>
++#include <cynara-session.h>
++
++#ifdef LOG_TAG
++#undef LOG_TAG
++#endif
++#define LOG_TAG "INPUTMETHOD_MANAGER"
++
++namespace
++{
++
++cynara *p_cynara = NULL;
++
++}
++
++bool
++inputmethod_cynara_initialize ()
++{
++    int ret = cynara_initialize (&p_cynara, NULL);
++    LOGW("[inputmethod_cynara_initialize]_check_privilege returned %d.", ret);
++    return ret == CYNARA_API_SUCCESS;
++}
++
++void
++inputmethod_cynara_finish ()
++{
++    if (p_cynara)
++        cynara_finish (p_cynara);
++
++    p_cynara = NULL;
++}
++
++bool
++checkPrivilege (const char *uid, const char *privilege)
++{
++    if (!p_cynara){
++        LOGW("p_cynara is false");
++        return false;
++    }
++
++    FILE *pFile = NULL;
++    char smackLabel[1024] = "/proc/self/attr/current";
++    pFile = fopen( "/proc/self/attr/current", "r" );
++    if( pFile != NULL )
++    {
++        fread(smackLabel, sizeof(smackLabel), 1, pFile); 
++        fclose( pFile );
++    }
++    LOGW("smackLabel = %s", smackLabel);
++
++    int ret = cynara_check (p_cynara, smackLabel, NULL, uid, privilege);
++    LOGW("[checkPrivilege]_check_privilege returned %d.", ret);
++    if (ret != CYNARA_API_ACCESS_ALLOWED)
++        return false;
++    return true;
++}
+-- 
+1.9.1
+
