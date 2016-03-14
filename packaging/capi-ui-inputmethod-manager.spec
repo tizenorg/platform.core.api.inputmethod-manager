@@ -9,6 +9,7 @@ BuildRequires:  cmake
 BuildRequires:  pkgconfig(capi-base-common)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(isf)
+BuildRequires:  pkgconfig(cynara-client)
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
