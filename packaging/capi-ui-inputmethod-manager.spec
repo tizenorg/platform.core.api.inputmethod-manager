@@ -1,6 +1,6 @@
 Name:       capi-ui-inputmethod-manager
 Summary:    Input Method Manager Library
-Version:    0.0.1
+Version:    0.0.2
 Release:    1
 Group:      Graphics & UI Framework/Input
 License:    Apache-2.0
@@ -9,6 +9,8 @@ BuildRequires:  cmake
 BuildRequires:  pkgconfig(capi-base-common)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(isf)
+BuildRequires:  pkgconfig(cynara-client)
+BuildRequires:  pkgconfig(cynara-session)
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
