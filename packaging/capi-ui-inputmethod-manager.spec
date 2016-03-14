@@ -30,8 +30,8 @@ Input Method Manager Library (Development)
 
 
 %build
-export CFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
-export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
+export CFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden -Werror"
+export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden -Werror"
 export FFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
 
 rm -rf CMakeFiles

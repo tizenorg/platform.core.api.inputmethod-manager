@@ -32,17 +32,19 @@ ime_manager_error_e _check_privilege()
 {
     char uid[16];
 
-    if(inputmethod_cynara_initialize () == false){
+    if(inputmethod_cynara_initialize() == false) {
         LOGE("inputmethod_cynara_initialize () == false");
         return IME_MANAGER_ERROR_PERMISSION_DENIED;
     }
 
     snprintf(uid, 16, "%d", getuid());
-    if(checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false){
-        LOGE("checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false   ");
+    if(checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false) {
+        LOGE("checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false");
         LOGE("uid : %s.", uid);
         return IME_MANAGER_ERROR_PERMISSION_DENIED;
     }
+
+    inputmethod_cynara_finish();
 
     return IME_MANAGER_ERROR_NONE;
 }
@@ -56,7 +58,6 @@ int ime_manager_show_ime_list(void)
         LOGE("_check_privilege returned %d.", retVal);
         return retVal;
     }
-    inputmethod_cynara_finish ();
 
     int ret = isf_control_show_ime_list();
     if (ret == 0)
@@ -76,7 +77,6 @@ int ime_manager_show_ime_selector(void)
         LOGE("_check_privilege returned %d.", retVal);
         return retVal;
     }
-    inputmethod_cynara_finish ();
 
     int ret = isf_control_show_ime_selector();
     if (ret == 0)
@@ -96,7 +96,6 @@ int ime_manager_is_ime_enabled(const char *app_id, bool *enabled)
         LOGE("_check_privilege returned %d.", retVal);
         return retVal;
     }
-    inputmethod_cynara_finish ();
 
     if (!app_id || !enabled) {
         LOGW("IME_MANAGER_ERROR_INVALID_PARAMETER");
@@ -121,7 +120,6 @@ int ime_manager_get_active_ime(char **app_id)
         LOGE("_check_privilege returned %d.", retVal);
         return retVal;
     }
-    inputmethod_cynara_finish ();
 
     if (!app_id) {
         LOGW("IME_MANAGER_ERROR_INVALID_PARAMETER");
