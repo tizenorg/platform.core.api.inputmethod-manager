@@ -1,0 +1,13 @@
+--- packaging/capi-ui-inputmethod-manager.spec
++++ packaging/capi-ui-inputmethod-manager.spec
+@@ -30,8 +31,8 @@
+ 
+ 
+ %build
+-export CFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
+-export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
++export CFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden -Werror"
++export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden -Werror"
+ export FFLAGS+=" -DTIZEN_DEBUG_ENABLE -fPIC -fvisibility=hidden"
+ 
+ rm -rf CMakeFiles
