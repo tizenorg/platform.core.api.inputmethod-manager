@@ -9,6 +9,7 @@ BuildRequires:  cmake
 BuildRequires:  pkgconfig(capi-base-common)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(isf)
+BuildRequires:  pkgconfig(cynara-client)
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -58,6 +59,7 @@ cp LICENSE %{buildroot}/usr/share/license/%{name}
 
 %files devel
 %{_includedir}/inputmethod_manager*.h
+%{_includedir}/privilege_checker*.h
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libcapi-ui-inputmethod-manager.so
 
