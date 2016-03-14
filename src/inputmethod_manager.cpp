@@ -30,7 +30,7 @@
 
 ime_manager_error_e _check_privilege()
 {
-    char uid[16]; char pid[16];
+    char uid[16];
 
     if(inputmethod_cynara_initialize () == false){
         LOGE("inputmethod_cynara_initialize () == false");
@@ -38,11 +38,9 @@ ime_manager_error_e _check_privilege()
     }
 
     snprintf(uid, 16, "%d", getuid());
-    snprintf(pid, 16, "%d", getpid());
     if(checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false){
         LOGE("checkPrivilege(uid, IME_MANAGER_PRIVILEGE) == false   ");
         LOGE("uid : %s.", uid);
-        LOGE("pid : %s.", pid);
         return IME_MANAGER_ERROR_PERMISSION_DENIED;
     }
 

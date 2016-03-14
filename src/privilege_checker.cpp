@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <dlog.h>
+#include <unistd.h>
 
 #include <cynara-client.h>
 #include <cynara-error.h>
@@ -43,7 +44,6 @@ bool
 checkPrivilege (const char *uid, const char *privilege)
 {
     if (!p_cynara){
-        LOGW("p_cynara is false");
         return false;
     }
 
@@ -57,8 +57,13 @@ checkPrivilege (const char *uid, const char *privilege)
     }
     LOGW("smackLabel = %s", smackLabel);
 
-    int ret = cynara_check (p_cynara, smackLabel, NULL, uid, privilege);
+    pid_t pid = getpid();
+    char* session =  cynara_session_from_pid(pid);
+    LOGW("session = %s", session);
+
+    int ret = cynara_check (p_cynara, smackLabel, session, uid, privilege);
     LOGW("[checkPrivilege]_check_privilege returned %d.", ret);
+    free(session);
     if (ret != CYNARA_API_ACCESS_ALLOWED)
         return false;
     return true;
