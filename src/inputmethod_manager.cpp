@@ -45,7 +45,7 @@ ime_manager_error_e _check_privilege()
         ret = IME_MANAGER_ERROR_PERMISSION_DENIED;
     }
 
-    inputmethod_cynara_finish ();
+    inputmethod_cynara_finish();
 
     return ret;
 }
