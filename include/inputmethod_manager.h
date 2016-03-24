@@ -36,7 +36,7 @@ extern "C" {
 /**
  * @brief Enumeration for input method manager function error
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
 typedef enum
 {
@@ -51,7 +51,7 @@ typedef enum
  *
  * @details This function provides the installed IME list menu for the IME developers who might want to open it to enable their IME.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -71,7 +71,7 @@ EXPORT_API int ime_manager_show_ime_list(void);
  *
  * @details This function provides the IME selector menu for the IME or other application developers who might want to change the default IME.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -91,7 +91,7 @@ EXPORT_API int ime_manager_show_ime_selector(void);
  *
  * @details The IME developers can use this function to check their IME is enabled or not.
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
@@ -115,7 +115,7 @@ EXPORT_API int ime_manager_is_ime_enabled(const char *app_id, bool *enabled);
  *
  * @remarks @a app_id must be released using free().
  *
- * @since_tizen 2.4
+ * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  *
  * @privlevel public
  *
