@@ -38,12 +38,11 @@ extern "C" {
  *
  * @since_tizen @if MOBILE 2.4 @else 3.0 @endif
  */
-typedef enum
-{
-    IME_MANAGER_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
-    IME_MANAGER_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
-    IME_MANAGER_ERROR_PERMISSION_DENIED = TIZEN_ERROR_PERMISSION_DENIED, /**< Permission denied */
-    IME_MANAGER_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0010, /**< Operation failed */
+typedef enum {
+	IME_MANAGER_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful */
+	IME_MANAGER_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
+	IME_MANAGER_ERROR_PERMISSION_DENIED = TIZEN_ERROR_PERMISSION_DENIED, /**< Permission denied */
+	IME_MANAGER_ERROR_OPERATION_FAILED = TIZEN_ERROR_IME | 0x0010, /**< Operation failed */
 } ime_manager_error_e;
 
 /**
@@ -141,5 +140,5 @@ EXPORT_API int ime_manager_get_active_ime(char **app_id);
 }
 #endif
 
-#endif // __TIZEN_UIX_INPUTMETHOD_MANAGER_H__
+#endif /* __TIZEN_UIX_INPUTMETHOD_MANAGER_H__ */
 

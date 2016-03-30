@@ -32,5 +32,5 @@
  * IME list or selector menu after their IME installation; then guide to select the installed IME.
  */
 
-#endif // __TIZEN_UIX_INPUTMETHOD_MANAGER_DOC_H__
+#endif /* __TIZEN_UIX_INPUTMETHOD_MANAGER_DOC_H__ */
 
