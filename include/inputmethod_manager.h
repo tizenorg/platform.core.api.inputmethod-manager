@@ -133,6 +133,25 @@ EXPORT_API int ime_manager_is_ime_enabled(const char *app_id, bool *enabled);
 EXPORT_API int ime_manager_get_active_ime(char **app_id);
 
 /**
+ * @brief Returns the number of IMEs which are enabled (usable).
+ *
+ * @since_tizen 3.0
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/imemanager
+ *
+ * @return The number of enabled (usable) IMEs
+ *
+ * @exception #IME_MANAGER_ERROR_NONE Successful
+ * #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
+ *
+ * @see ime_manager_is_ime_enabled, ime_manager_show_ime_selector
+ */
+EXPORT_API int ime_manager_count_enabled_ime(void);
+
+/**
  * @}
  */
 
