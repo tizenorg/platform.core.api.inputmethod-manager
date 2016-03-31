@@ -61,7 +61,7 @@ typedef enum {
  * @retval #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
  *
- * @see ime_manager_show_ime_selector
+ * @see ime_manager_show_ime_selector()
  */
 EXPORT_API int ime_manager_show_ime_list(void);
 
@@ -81,7 +81,7 @@ EXPORT_API int ime_manager_show_ime_list(void);
  * @retval #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
  *
- * @see ime_manager_show_ime_list
+ * @see ime_manager_show_ime_list()
  */
 EXPORT_API int ime_manager_show_ime_selector(void);
 
@@ -105,7 +105,7 @@ EXPORT_API int ime_manager_show_ime_selector(void);
  * @retval #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
  *
- * @see ime_manager_show_ime_list
+ * @see ime_manager_show_ime_list()
  */
 EXPORT_API int ime_manager_is_ime_enabled(const char *app_id, bool *enabled);
 
@@ -128,9 +128,32 @@ EXPORT_API int ime_manager_is_ime_enabled(const char *app_id, bool *enabled);
  * @retval #IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
  * @retval #IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
  *
- * @see ime_manager_show_ime_selector
+ * @see ime_manager_show_ime_selector()
  */
 EXPORT_API int ime_manager_get_active_ime(char **app_id);
+
+/**
+ * @brief Gets the number of IMEs which are enabled (usable).
+ *
+ * @since_tizen 3.0
+ *
+ * @remarks The specific error code can be obtained using the get_last_result() method.
+ *          Error codes are described in Exception section.
+ *
+ * @privlevel public
+ *
+ * @privilege %http://tizen.org/privilege/imemanager
+ *
+ * @return The @a number of enabled IMEs on success, otherwise @c 0.
+ *
+ * @exception IME_MANAGER_ERROR_NONE Successful
+ * @exception IME_MANAGER_ERROR_PERMISSION_DENIED The application does not have the privilege to call this function
+ * @exception IME_MANAGER_ERROR_OPERATION_FAILED Operation failed
+ *
+ * @see ime_manager_is_ime_enabled()
+ * @see ime_manager_show_ime_selector()
+ */
+EXPORT_API int ime_manager_get_enabled_ime_count(void);
 
 /**
  * @}
