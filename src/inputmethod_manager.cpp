@@ -136,3 +136,32 @@ int ime_manager_get_active_ime(char **app_id)
     return IME_MANAGER_ERROR_NONE;
 }
 
+int ime_manager_count_enabled_ime(void)
+{
+    ime_manager_error_e retVal = IME_MANAGER_ERROR_NONE;
+    ime_info_s *ime_info = NULL;
+    int i, result = 0, cnt;
+
+    retVal = _check_privilege();
+    if (retVal != IME_MANAGER_ERROR_NONE) {
+        set_last_result(IME_MANAGER_ERROR_PERMISSION_DENIED);
+        LOGE("_check_privilege returned %d.", retVal);
+        return result;
+    }
+
+    cnt = isf_control_get_all_ime_info(&ime_info);
+    if (ime_info) {
+        for (i = 0; i < cnt; i++) {
+            if (ime_info[i].is_enabled)
+                result++;
+        }
+        free(ime_info);
+    }
+
+    if (result == 0)
+        set_last_result(IME_MANAGER_ERROR_OPERATION_FAILED);
+    else
+        set_last_result(IME_MANAGER_ERROR_NONE);
+
+    return result;
+}
