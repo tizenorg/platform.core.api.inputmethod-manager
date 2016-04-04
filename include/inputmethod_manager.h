@@ -137,6 +137,9 @@ EXPORT_API int ime_manager_get_active_ime(char **app_id);
  *
  * @since_tizen 3.0
  *
+ * @remarks The specific error code can be obtained using the get_last_result() method.
+ *          Error codes are described in Exception section.
+ *
  * @privlevel public
  *
  * @privilege %http://tizen.org/privilege/imemanager
