@@ -1,6 +1,6 @@
 Name:       capi-ui-inputmethod-manager
 Summary:    Input Method Manager Library
-Version:    0.0.4
+Version:    0.0.5
 Release:    1
 Group:      Graphics & UI Framework/Input
 License:    Apache-2.0
