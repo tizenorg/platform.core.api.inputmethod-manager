@@ -63,8 +63,7 @@ int ime_manager_show_ime_list(void)
     int ret = isf_control_show_ime_list();
     if (ret == 0) {
         return IME_MANAGER_ERROR_NONE;
-    }
-    else {
+    } else {
         LOGW("IME_MANAGER_ERROR_OPERATION_FAILED");
         return IME_MANAGER_ERROR_OPERATION_FAILED;
     }
@@ -83,8 +82,7 @@ int ime_manager_show_ime_selector(void)
     int ret = isf_control_show_ime_selector();
     if (ret == 0) {
         return IME_MANAGER_ERROR_NONE;
-    }
-    else {
+    } else {
         LOGW("IME_MANAGER_ERROR_OPERATION_FAILED");
         return IME_MANAGER_ERROR_OPERATION_FAILED;
     }
