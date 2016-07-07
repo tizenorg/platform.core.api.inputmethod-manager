@@ -34,14 +34,11 @@ ime_manager_error_e _check_privilege()
     ime_manager_error_e ret = IME_MANAGER_ERROR_NONE;
 
     if (inputmethod_cynara_initialize() == false) {
-        LOGE("inputmethod_cynara_initialize () == false");
         return IME_MANAGER_ERROR_PERMISSION_DENIED;
     }
 
     snprintf(uid, 16, "%d", getuid());
     if (check_privilege(uid, IME_MANAGER_PRIVILEGE) == false) {
-        LOGE("check_privilege(uid, IME_MANAGER_PRIVILEGE) == false");
-        LOGE("uid : %s.", uid);
         ret = IME_MANAGER_ERROR_PERMISSION_DENIED;
     }
 
@@ -56,7 +53,6 @@ int ime_manager_show_ime_list(void)
 
     retVal = _check_privilege();
     if (retVal != IME_MANAGER_ERROR_NONE) {
-        LOGE("_check_privilege returned %d.", retVal);
         return retVal;
     }
 
@@ -64,7 +60,6 @@ int ime_manager_show_ime_list(void)
     if (ret == 0) {
         return IME_MANAGER_ERROR_NONE;
     } else {
-        LOGW("IME_MANAGER_ERROR_OPERATION_FAILED");
         return IME_MANAGER_ERROR_OPERATION_FAILED;
     }
 }
@@ -75,7 +70,6 @@ int ime_manager_show_ime_selector(void)
 
     retVal = _check_privilege();
     if (retVal != IME_MANAGER_ERROR_NONE) {
-        LOGE("_check_privilege returned %d.", retVal);
         return retVal;
     }
 
@@ -83,7 +77,6 @@ int ime_manager_show_ime_selector(void)
     if (ret == 0) {
         return IME_MANAGER_ERROR_NONE;
     } else {
-        LOGW("IME_MANAGER_ERROR_OPERATION_FAILED");
         return IME_MANAGER_ERROR_OPERATION_FAILED;
     }
 }
@@ -94,18 +87,15 @@ int ime_manager_is_ime_enabled(const char *app_id, bool *enabled)
 
     retVal = _check_privilege();
     if (retVal != IME_MANAGER_ERROR_NONE) {
-        LOGE("_check_privilege returned %d.", retVal);
         return retVal;
     }
 
     if (!app_id || !enabled) {
-        LOGW("IME_MANAGER_ERROR_INVALID_PARAMETER");
         return IME_MANAGER_ERROR_INVALID_PARAMETER;
     }
 
     int ret = isf_control_is_ime_enabled(app_id, enabled);
     if (ret < 0) {
-        LOGW("IME_MANAGER_ERROR_OPERATION_FAILED");
         return IME_MANAGER_ERROR_OPERATION_FAILED;
     }
 
@@ -118,18 +108,15 @@ int ime_manager_get_active_ime(char **app_id)
 
     retVal = _check_privilege();
     if (retVal != IME_MANAGER_ERROR_NONE) {
-        LOGE("_check_privilege returned %d.", retVal);
         return retVal;
     }
 
     if (!app_id) {
-        LOGW("IME_MANAGER_ERROR_INVALID_PARAMETER");
         return IME_MANAGER_ERROR_INVALID_PARAMETER;
     }
 
     int ret = isf_control_get_active_ime(app_id);
     if (ret < 0) {
-        LOGW("IME_MANAGER_ERROR_OPERATION_FAILED");
         return IME_MANAGER_ERROR_OPERATION_FAILED;
     }
 
@@ -145,7 +132,6 @@ int ime_manager_get_enabled_ime_count(void)
     retVal = _check_privilege();
     if (retVal != IME_MANAGER_ERROR_NONE) {
         set_last_result(IME_MANAGER_ERROR_PERMISSION_DENIED);
-        LOGE("_check_privilege returned %d.", retVal);
         return enable_ime_count;
     }
 

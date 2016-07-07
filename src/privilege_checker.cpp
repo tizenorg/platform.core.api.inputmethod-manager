@@ -52,9 +52,7 @@ check_privilege(const char *uid, const char *privilege)
 
     fp = fopen("/proc/self/attr/current", "r");
     if (fp != NULL) {
-        if (fread(smack_label, 1, sizeof(smack_label), fp) <= 0)
-            LOGW("Error : fread");
-
+        if (fread(smack_label, 1, sizeof(smack_label), fp) <= 0);
         fclose(fp);
     }
 
